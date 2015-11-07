@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmackBrosClient", "SmackBrosClient\SmackBrosClient\SmackBrosClient.csproj", "{D88A65F4-2C01-463F-A3EF-FC30C8916380}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "SmackBrosClientContent", "SmackBrosClient\SmackBrosClientContent\SmackBrosClientContent.contentproj", "{DDB5CE5D-5894-4B0D-92A1-7D72DB1FED3F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D88A65F4-2C01-463F-A3EF-FC30C8916380}.Debug|x86.ActiveCfg = Debug|x86
+		{D88A65F4-2C01-463F-A3EF-FC30C8916380}.Debug|x86.Build.0 = Debug|x86
+		{D88A65F4-2C01-463F-A3EF-FC30C8916380}.Release|x86.ActiveCfg = Release|x86
+		{D88A65F4-2C01-463F-A3EF-FC30C8916380}.Release|x86.Build.0 = Release|x86
+		{DDB5CE5D-5894-4B0D-92A1-7D72DB1FED3F}.Debug|x86.ActiveCfg = Debug|x86
+		{DDB5CE5D-5894-4B0D-92A1-7D72DB1FED3F}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
