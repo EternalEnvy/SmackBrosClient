@@ -1,2 +1,0 @@
-C:\Users\Lee\Documents\GitHub\SmackBrosClient\SmackBrosClient\SmackBrosClient\SmackBrosClient\obj\x86\Debug\SmackBrosClient.csprojResolveAssemblyReference.cache
-C:\Users\Lee\Documents\GitHub\SmackBrosClient\SmackBrosClient\SmackBrosClient\SmackBrosClient\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
