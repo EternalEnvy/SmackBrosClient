@@ -12,9 +12,8 @@ namespace SmackBrosClient
         public short mmr;
         public string IPAddress;
         public bool joining;
-        public QueueInteractionPacket(bool joiningQueue)
+        public QueueInteractionPacket()
         {
-            joining = joiningQueue;
             typeID = 1;
         }
         public override void WritePacketData(List<byte> stream)
@@ -26,10 +25,10 @@ namespace SmackBrosClient
         }
         public override void ReadPacketData(Stream stream)
         {
-            joining = ReadBoolFromStream(stream);
-            name = ReadStringFromStream(stream);
-            mmr = ReadShortFromStream(stream);
-            IPAddress = ReadStringFromStream(stream);
+            joining = ReadBool(stream);
+            name = ReadString(stream);
+            mmr = ReadShort(stream);
+            IPAddress = ReadString(stream);
         }
     }
 }

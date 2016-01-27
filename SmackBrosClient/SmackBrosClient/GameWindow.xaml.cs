@@ -51,6 +51,8 @@ namespace SmackBrosClient
         static Queue<Packet> packetProcessQueue = new Queue<Packet>();
         static DateTime lastUpdateInputThread = DateTime.Now;
         static DateTime lastUpdateUpdateThread = DateTime.Now;
+        static int BufferStateLength = 4;
+
         //The current rotation.
         private float rotation = 0.0f;
         private bool TexturesInitialised = false;
@@ -60,9 +62,9 @@ namespace SmackBrosClient
 
         private Assimp.Scene m_model;
         private Vector3 m_sceneCenter, m_sceneMin, m_sceneMax;
-        private float m_angle;
-        private int m_displayList;
-        private int m_texId;
+        //private float m_angle;
+        //private int m_displayList;
+        //private int m_texId;
 
         //Collections
         public Dictionary<string, SoundPlayer> songs = new Dictionary<string, SoundPlayer>();
@@ -71,6 +73,7 @@ namespace SmackBrosClient
 
         AssimpContext Importer = new AssimpContext();
 
+        List<Smacker> smackers = new List<Smacker>();
         private List<Inputs> inputlist = new List<Inputs>();
 
         //Temporary; for fun
@@ -84,13 +87,14 @@ namespace SmackBrosClient
         }
         public void LoadContent()
         {
+            songs.Add("Melee Menu", new SoundPlayer(@"C:\Users\Lee\Documents\GitHub\SmackBrosClient\SmackBrosClient\files\menu.wav"));
             OpenGL gl = openGLControl.OpenGL;
-            //String fileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "duck.dae");
-            //AssimpContext importer = new AssimpContext();
-            //importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
-            //m_model = importer.ImportFile(fileName, PostProcessPreset.TargetRealTimeMaximumQuality);
-            //ComputeBoundingBox();
-            songs.Add("Melee Menu", new SoundPlayer(@"C:\Users\Lee\Documents\GitHub\SmackBrosClient\SmackBrosClient\files\menu.wav")); 
+            String fileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "duck.dae");
+            AssimpContext importer = new AssimpContext();
+            importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
+            m_model = importer.ImportFile(fileName, PostProcessPreset.TargetRealTimeMaximumQuality);
+            ComputeBoundingBox();
+            
         }
         private void playSimpleSound()
         {
@@ -258,6 +262,7 @@ namespace SmackBrosClient
         }
         private bool LoadModelAsset (string path)
         {
+            path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), path);
 	        /* we are taking one of the postprocessing presets to avoid
 	        spelling out 20+ single postprocessing flags here. */ 
 	        m_model = Importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
@@ -283,8 +288,7 @@ namespace SmackBrosClient
         void Get_Bounding_Box_For_Node (Node nd, Vector3 min, Vector3 max, Matrix4x4 trafo)
         {
             OpenGL gl = openGLControl.OpenGL;
-	        Matrix4x4 prev;
-            prev = trafo;
+            Matrix4x4 prev = trafo; 
             trafo = trafo * nd.Transform;
             for (int n = 0; n < nd.MeshCount; ++n) {
                 Mesh mesh = m_model.Meshes[nd.MeshIndices[n]];
@@ -313,7 +317,7 @@ namespace SmackBrosClient
             Matrix4 m = FromMatrix(node.Transform);
             m.Transpose();
             gl.PushMatrix();
-            gl.MultMatrix(m);
+            gl.MultMatrix(FloatFromMatrix(m));
 
             if (node.HasMeshes)
             {
@@ -461,6 +465,27 @@ namespace SmackBrosClient
 	        f[2] = c.B;
 	        f[3] = c.A;
         }
+        private float[] FloatFromMatrix(Matrix4 mat)
+        {
+            float[] f = new float[16];
+            f[0] = mat.M11;
+            f[1] = mat.M12;
+            f[2] = mat.M13;
+            f[3] = mat.M14;
+            f[4] = mat.M21;
+            f[5] = mat.M22;
+            f[6] = mat.M23;
+            f[7] = mat.M24;
+            f[8] = mat.M31;
+            f[9] = mat.M32;
+            f[10] = mat.M33;
+            f[11] = mat.M34;
+            f[12] = mat.M41;
+            f[13] = mat.M42;
+            f[14] = mat.M43;
+            f[15] = mat.M44;
+            return f;
+        }
         private Matrix4 FromMatrix(Matrix4x4 mat)
         {
             Matrix4 m = new Matrix4();
@@ -482,7 +507,7 @@ namespace SmackBrosClient
             m.M44 = mat.D4;
             return m;
         }
-        static void StartThreads()
+        void StartThreads()
         {
             new Task(() =>
             {
@@ -508,10 +533,22 @@ namespace SmackBrosClient
             {
 
                 InputThread = new Thread(() => HandleInput());
-                InputThread.IsBackground = true;
+                InputThread.SetApartmentState(ApartmentState.STA);
                 InputThread.Start();
             }).Start();
             serverInitialized = true;
+        }
+        private void UpdateToState(GameStatePacket statePacket)
+        {
+
+        }
+        private void LinearInterpolateUpdateToState(GameStatePacket statePacket1, GameStatePacket statePacket2, long targetSequence)
+        {
+            float weight = (targetSequence - statePacket1.Sequence) / (statePacket2.Sequence - statePacket1.Sequence);
+            for(int i = 0; i < smackers.Count(); i++)
+            {
+                smackers[i].Position = Vector3.Lerp(statePacket1.Smackers[i], statePacket2.Smackers[i], weight);
+            }
         }
         private Vector3 FromVector(Vector3D vec)
         {

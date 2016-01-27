@@ -7,7 +7,7 @@ namespace SmackBrosClient
 {
     class Smacker
     {
-        
+        public Vector3 Position;
     }
     enum SmackerStates
     {

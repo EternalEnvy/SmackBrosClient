@@ -8,17 +8,17 @@ namespace SmackBrosClient
 {
     class Vector3:IComparable
     {
-        public double X;
-        public double Y;
-        public double Z;
-        public Vector3(double x, double y, double z)
+        public float X;
+        public float Y;
+        public float Z;
+        public Vector3(float x, float y, float z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
         }
 
-        public Vector3(double[] xyz)
+        public Vector3(float[] xyz)
         {
             if (xyz.Length == 3)
             {
@@ -40,11 +40,11 @@ namespace SmackBrosClient
         }
         private const string THREE_COMPONENTS =
            "Array must contain exactly three components , (x,y,z)";
-        public double Magnitude
+        public float Magnitude
         {
             get
             {
-                return Math.Sqrt(SumComponentSqrs());
+                return (float)Math.Sqrt(SumComponentSqrs());
             }
         }
         public static Vector3 operator +(Vector3 v1, Vector3 v2)
@@ -91,9 +91,9 @@ namespace SmackBrosClient
         {
             return v1.SumComponentSqrs() > v2.SumComponentSqrs();
         }
-        public double SumComponentSqrs()
+        public float SumComponentSqrs()
         {
-            return Math.Pow(this.X,2) +Math.Pow(this.Y,2) + Math.Pow(this.Z,2);
+            return (float)(Math.Pow(this.X,2) +Math.Pow(this.Y,2) + Math.Pow(this.Z,2));
         }
         public static bool operator ==(Vector3 v1, Vector3 v2)
         {
@@ -127,12 +127,15 @@ namespace SmackBrosClient
             Transform(ref position, ref matrix, out position);
             return position;
         }
-
         public static void Transform(ref Vector3 position, ref Matrix4 matrix, out Vector3 result)
         {
             result = new Vector3((position.X * matrix.M11) + (position.Y * matrix.M21) + (position.Z * matrix.M31) + matrix.M41,
                                  (position.X * matrix.M12) + (position.Y * matrix.M22) + (position.Z * matrix.M32) + matrix.M42,
                                  (position.X * matrix.M13) + (position.Y * matrix.M23) + (position.Z * matrix.M33) + matrix.M43);
+        }
+        public static Vector3 Lerp(Vector3 v1, Vector3 v2, float weight)
+        {
+            return v1 + (v2 - v1) * weight;
         }
         public bool Equals(Vector3 other)
         {
@@ -141,7 +144,7 @@ namespace SmackBrosClient
                this.Y.Equals(other.Y) &&
                this.Z.Equals(other.Z);
         }
-        public bool Equals(object other, double tolerance)
+        public bool Equals(object other, float tolerance)
         {
             if (other is Vector3)
             {
@@ -150,7 +153,7 @@ namespace SmackBrosClient
             return false;
         }
 
-        public bool Equals(Vector3 other, double tolerance)
+        public bool Equals(Vector3 other, float tolerance)
         {
             return
                AlmostEqualsWithAbsTolerance(this.X, other.X, tolerance) &&
@@ -167,7 +170,6 @@ namespace SmackBrosClient
                 // shortcut, handles infinities
                 return true;
             }
-
             return diff <= maxAbsoluteError;
         }
         public override int GetHashCode()
@@ -200,7 +202,7 @@ namespace SmackBrosClient
                 ARGUMENT_TYPE + other.GetType().ToString(),
                 "other");
         }
-        public static Vector3 operator *(Vector3 v1, double s2)
+        public static Vector3 operator *(Vector3 v1, float s2)
         {
             return
                new Vector3
@@ -210,7 +212,7 @@ namespace SmackBrosClient
                   v1.Z * s2
                );
         }
-        public static Vector3 operator *(double s1, Vector3 v2)
+        public static Vector3 operator *(float s1, Vector3 v2)
         {
             return v2 * s1;
         }
@@ -228,7 +230,7 @@ namespace SmackBrosClient
         {
             return CrossProduct(this, other);
         }
-        public static double DotProduct(Vector3 v1, Vector3 v2)
+        public static float DotProduct(Vector3 v1, Vector3 v2)
         {
             return
             (
@@ -237,11 +239,11 @@ namespace SmackBrosClient
                v1.Z * v2.Z
             );
         }
-        public double DotProduct(Vector3 other)
+        public float DotProduct(Vector3 other)
         {
             return DotProduct(this, other);
         }
-        public static Vector3 operator /(Vector3 v1, double s2)
+        public static Vector3 operator /(Vector3 v1, float s2)
         {
             return
             (
@@ -288,20 +290,20 @@ namespace SmackBrosClient
             }
 
             // Special Cases
-            if (double.IsInfinity(v1.Magnitude))
+            if (float.IsInfinity(v1.Magnitude))
             {
                 var x =
                     v1.X == 0 ? 0 :
                         v1.X == -0 ? -0 :
-                            double.IsPositiveInfinity(v1.X) ? 1 :
-                                double.IsNegativeInfinity(v1.X) ? -1 :
-                                    double.NaN;
+                            float.IsPositiveInfinity(v1.X) ? 1 :
+                                float.IsNegativeInfinity(v1.X) ? -1 :
+                                    float.NaN;
                 var y =
                     v1.Y == 0 ? 0 :
                         v1.Y == -0 ? -0 :
-                            double.IsPositiveInfinity(v1.Y) ? 1 :
-                                double.IsNegativeInfinity(v1.Y) ? -1 :
-                                    double.NaN;
+                            float.IsPositiveInfinity(v1.Y) ? 1 :
+                                float.IsNegativeInfinity(v1.Y) ? -1 :
+                                    float.NaN;
                 var z =
                     v1.Z == 0 ? 0 :
                         v1.Z == -0 ? -0 :
@@ -309,7 +311,7 @@ namespace SmackBrosClient
                                 double.IsNegativeInfinity(v1.Z) ? -1 :
                                     double.NaN;
 
-                var result = new Vector3(x, y, z);
+                var result = new Vector3((float)x, (float)y, (float)z);
 
                 // If this was a special case return the special case result
                 return result;
@@ -328,7 +330,7 @@ namespace SmackBrosClient
         private static Vector3 NormalizeOrNaN(Vector3 v1)
         {
             // find the inverse of the vectors magnitude
-            double inverse = 1 / v1.Magnitude;
+            float inverse = 1 / v1.Magnitude;
 
             return new Vector3(
                 // multiply each component by the inverse of the magnitude

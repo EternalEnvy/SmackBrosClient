@@ -5,9 +5,9 @@ using System.Text;
 
 namespace SmackBrosClient
 {
-    class QueueAcceptedJoinPacket:Packet
+    class QueueStatusUpdatePacket:Packet
     {
-        public QueueAcceptedJoinPacket()
+        public QueueStatusUpdatePacket()
         {
             typeID = 2;
         }

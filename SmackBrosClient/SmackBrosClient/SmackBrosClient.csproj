@@ -81,6 +81,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="GameTime.cs" />
+    <Compile Include="AnimationLoader.cs" />
+    <Compile Include="InputPacket.cs" />
     <Compile Include="QueueAcceptedJoinPacket.cs" />
     <Compile Include="QueueFinishedPacket.cs" />
     <Compile Include="QueueInteractionPacket.cs" />

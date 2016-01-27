@@ -10,7 +10,8 @@ namespace SmackBrosClient
     {
         public long Sequence;
         private static long lastSequence = -1;
-        public List<Smacker> Smackers = new List<Smacker>();
+        public List<Vector3> Smackers = new List<Vector3>();
+        public List<int> SmackerState = new List<int>();
         public List<Hitbox> Hitboxes = new List<Hitbox>();
         public GameStatePacket()
         {
@@ -18,12 +19,12 @@ namespace SmackBrosClient
         }
         public override void ReadPacketData(Stream stream)
         {
-            int numSmackers = ReadIntFromStream(stream);
+            int numSmackers = ReadInt(stream);
             for(int i = 0; i < numSmackers; i++)
             {
                 //figure this out later
             }
-            int numHitboxes = ReadIntFromStream(stream);
+            int numHitboxes = ReadInt(stream);
             for(int i = 0; i < numHitboxes; i++)
             {
                 //figure this out later
