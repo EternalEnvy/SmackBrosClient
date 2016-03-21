@@ -15,11 +15,11 @@ namespace SmackBrosClient
         }
         public override void ReadPacketData(Stream stream)
         { 
-            Accepted =stream.ReadByte() == 1;
+            Accepted = stream.ReadByte() == 1;
         }
         public override void WritePacketData(List<byte> stream)
         {
-            throw new NotImplementedException();
+            WriteBool(stream, Accepted);
         }
     }
 }

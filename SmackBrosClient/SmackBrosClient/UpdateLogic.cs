@@ -11,17 +11,21 @@ using System.Windows.Input;
 
 namespace SmackBrosClient
 {
-    public partial class GameWindow:Window
+    public partial class GameplayScreen
     {
-        protected void Update(GameTime gameTime)
+        public override void Update()
         {
 
         }
-        private static void HandleInput()
+        public override void UpdateMouse()
+        {
+            return;
+        }
+        public override void UpdateInput()
         {
             while (true)
             {
-                if ((DateTime.Now - lastUpdateInputThread) > TimeSpan.FromMilliseconds(167))
+                if ((DateTime.Now - lastUpdateInputThread) > TimeSpan.FromMilliseconds(16.7))
                 {
                     if (Keyboard.IsKeyDown(Key.Escape))
                     {

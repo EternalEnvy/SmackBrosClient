@@ -105,7 +105,10 @@ namespace SmackBrosClient
         {
             return new Vector2(v2 * ((float)(v1.Dot(v2) / Math.Pow(v2.Length, 2))));
         }
-
+        public static Vector2 Lerp(Vector2 v1, Vector2 v2, float weight)
+        {
+            return v1 + (v2 - v1) * weight;
+        }
         public Vector2 Projection(Vector2 direction)
         {
             return Projection(this, direction);

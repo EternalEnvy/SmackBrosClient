@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SmackBrosClient
 {
-    class FindMatchScreen
+    public class FindMatchScreen : Screen
     {
         int port1 = 1521;
         int port2 = 1522;
@@ -18,18 +18,14 @@ namespace SmackBrosClient
         UdpClient client2;
         UdpClient client3;
         Thread ReceivingThread;
-        Thread MatchFinderThread;
         string ServerIP;
         List<string> clientIPList = new List<string>();
         readonly object packetProcessQueueLock = new object();
         Queue<Packet> packetProcessQueue = new Queue<Packet>();
         DateTime lastUpdateServerThread = DateTime.Now;
+        bool findingMatch = false;
 
-        public FindMatchScreen()
-        {
-
-        }
-        public void Update(GameTime gameTime)
+        public override void Update()
         {
             if (DateTime.Now - lastUpdateServerThread > TimeSpan.FromMilliseconds(100))
             {
@@ -38,29 +34,21 @@ namespace SmackBrosClient
                     while (packetProcessQueue.Any())
                     {
                         var packet = packetProcessQueue.Dequeue();
-                        if (packet.GetPacketType() == 1)
-                        {
-
-                        }
                         if (packet.GetPacketType() == 2)
                         {
-
+                            var packet2 = (QueueStatusUpdatePacket)packet;
                         }
-                        if (packet.GetPacketType() == 3)
+                        else if (packet.GetPacketType() == 3)
                         {
-
-                        }                        
-                        if (packet.GetPacketType() == 4)
-                        {
-
+                            var packet2 = (QueueFinishedPacket)packet;
+                            MatchFoundScreen matchFoundScreen = new MatchFoundScreen();
+                            matchFoundScreen.Initialize(ref this.screenManager);
+                            matchFoundScreen.ipToConnect = packet2.ipToConnect;
+                            screenManager.AddScreen(matchFoundScreen);
                         }
-                        if (packet.GetPacketType() == 5)
+                        else
                         {
-
-                        }
-                        if (packet.GetPacketType() == 6)
-                        {
-
+                            //what the fuck son
                         }
                     }
                 }
@@ -88,6 +76,23 @@ namespace SmackBrosClient
                 ReceivingThread.IsBackground = true;
                 ReceivingThread.Start();
             }).Start();
+        }
+        public override void CloseScreen()
+        {
+            throw new NotImplementedException();
+        }
+        public override void Initialize(ref SharpGL.OpenGL gl)
+        {
+            StartServer();
+            findingMatch = true;
+        }
+        public override void Draw(ref SharpGL.OpenGL gl)
+        {
+            throw new NotImplementedException();
+        }
+        public override void ShowScreen()
+        {
+            throw new NotImplementedException();
         }
     }
 }

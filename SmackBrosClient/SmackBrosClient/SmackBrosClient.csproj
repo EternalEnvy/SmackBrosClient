@@ -83,11 +83,13 @@
     <Compile Include="GameTime.cs" />
     <Compile Include="AnimationLoader.cs" />
     <Compile Include="InputPacket.cs" />
-    <Compile Include="QueueAcceptedJoinPacket.cs" />
+    <Compile Include="MatchFoundScreen.cs" />
+    <Compile Include="QueueStatusUpdatePacket.cs" />
     <Compile Include="QueueFinishedPacket.cs" />
     <Compile Include="QueueInteractionPacket.cs" />
     <Compile Include="Screen.cs" />
     <Compile Include="ScreenManager.cs" />
+    <Compile Include="ShaderLoader.cs" />
     <Compile Include="Smacker.cs" />
     <Compile Include="UpdateLogic.cs" />
     <Compile Include="Vector2.cs" />

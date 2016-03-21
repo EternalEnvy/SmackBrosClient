@@ -7,17 +7,18 @@ namespace SmackBrosClient
 {
     class QueueFinishedPacket:Packet
     {
+        public string ipToConnect;
         public QueueFinishedPacket()
         {
             typeID = 3;
         }
         public override void ReadPacketData(System.IO.Stream stream)
         {
-            throw new NotImplementedException();
+            ipToConnect = ReadString(stream);
         }
         public override void WritePacketData(List<byte> stream)
         {
-            throw new NotImplementedException();
+            WriteStringBytes(stream, ipToConnect);
         }
     }
 }

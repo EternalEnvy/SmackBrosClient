@@ -162,6 +162,31 @@ namespace SmackBrosClient
                 Array.Reverse(longToWrite);
             stream.AddRange(longToWrite);
         }
+        protected Vector2 ReadVector2(Stream stream)
+        {
+            var vec = new float[3];
+            for (int i = 0; i < 3; i++)
+            {
+                var bytes = new byte[4];
+                stream.Read(bytes, 0, 4);
+                if (BitConverter.IsLittleEndian)
+                    bytes = bytes.Reverse().ToArray();
+                vec[i] = BitConverter.ToSingle(bytes, 0);
+            }
+            return new Vector2(vec[0], vec[1]);
+        }
+
+        protected void WriteVector2(List<byte> stream, Vector2 num)
+        {
+            var vec = new[] { num.X, num.Y };
+            foreach (var n in vec)
+            {
+                var bytes = BitConverter.GetBytes(n);
+                if (BitConverter.IsLittleEndian)
+                    bytes = bytes.Reverse().ToArray();
+                stream.AddRange(bytes);
+            }
+        }
         public static void WritePacket(List<byte> stream, Packet packet)
         {
             stream.Add(packet.typeID);

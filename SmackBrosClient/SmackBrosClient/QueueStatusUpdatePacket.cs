@@ -7,6 +7,7 @@ namespace SmackBrosClient
 {
     class QueueStatusUpdatePacket:Packet
     {
+
         public QueueStatusUpdatePacket()
         {
             typeID = 2;

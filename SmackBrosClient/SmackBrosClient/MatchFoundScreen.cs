@@ -2,33 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SharpGL;
 
 namespace SmackBrosClient
 {
-    class MainMenuScreen:Screen
+    public class MatchFoundScreen:Screen
     {
-        public override void PauseScreen()
+        public string ipToConnect;
+
+        public override void Draw(ref SharpGL.OpenGL gl)
         {
             throw new NotImplementedException();
         }
-        public override void CloseScreen()
-        {
-            throw new NotImplementedException();
-        }
-        public override void ShowScreen()
-        {
-            throw new NotImplementedException();
-        }
-        public override void Initialize(ref OpenGL gl)
-        {
-            throw new NotImplementedException();
-        }
-        public override void Draw(ref OpenGL gl)
+        public override void Initialize(ref SharpGL.OpenGL gl)
         {
             throw new NotImplementedException();
         }
         public override void Update()
+        {
+            if()
+            throw new NotImplementedException();
+        }
+        public override void UpdateInput()
+        {
+            throw new NotImplementedException();
+        }
+        public override void UpdateMouse()
         {
             throw new NotImplementedException();
         }

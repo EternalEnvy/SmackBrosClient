@@ -10,29 +10,30 @@ namespace SmackBrosClient
     {
         public long Sequence;
         private static long lastSequence = -1;
-        public List<Vector3> Smackers = new List<Vector3>();
-        public List<int> SmackerState = new List<int>();
-        public List<Hitbox> Hitboxes = new List<Hitbox>();
+        public List<Tuple<short, short, Vector2>> Smackers = new List<Tuple<short, short, Vector2>>();
         public GameStatePacket()
         {
             typeID = 7;
+            Sequence = ++lastSequence;
         }
         public override void ReadPacketData(Stream stream)
         {
-            int numSmackers = ReadInt(stream);
-            for(int i = 0; i < numSmackers; i++)
+            short numSmackers = ReadShort(stream);
+            for (int i = 0; i < numSmackers; i++)
             {
-                //figure this out later
-            }
-            int numHitboxes = ReadInt(stream);
-            for(int i = 0; i < numHitboxes; i++)
-            {
-                //figure this out later
+                Smackers.Add(new Tuple<short, short, Vector2>(ReadShort(stream), ReadShort(stream), ReadVector2(stream)));
             }
         }
         public override void WritePacketData(List<byte> stream)
         {
-            throw new NotImplementedException();
+            WriteShort(stream, (short)Smackers.Count());
+            for (int i = 0; i < Smackers.Count(); i++)
+            {
+                WriteShort(stream, Smackers[i].Item1);
+                WriteShort(stream, Smackers[i].Item2);
+                WriteVector2(stream, Smackers[i].Item3);
+            }
         }
+        
     }
 }
